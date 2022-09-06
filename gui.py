@@ -5,6 +5,8 @@ import tkinter.ttk
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait as WD
 from time import sleep
 import chromedriver_autoinstaller
 import random
@@ -16,7 +18,7 @@ driver = None
 
 def num_random():
     random_num = random.uniform(2, 5)
-    return round(random_num, 2)
+    return random_num
 
 def save(level, save_name):
     file = open(f'./{save_name}.txt', 'a', encoding='utf-8')
@@ -36,44 +38,44 @@ def following_list_1(level0, driver):
         except:
             pass
         following_id = i.find_element(By.CLASS_NAME, '_aacl._aaco._aacw._adda._aacx._aad7._aade').text.strip("인증됨\n")
+        WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')))
         div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
+        WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
         people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
-        for j in people[len(level0):]:
+        for j in people:
             if j not in level0:
                 level0.append(j)
             
         i_href = i.find_element(By.TAG_NAME, 'a').get_attribute('href')
         driver.execute_script(f'window.open("{i_href}");')
         driver.switch_to.window(driver.window_handles[1])
-        sleep(4)
+        # sleep(4)
+        WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ac2a')))
         num = driver.find_elements(By.CLASS_NAME, '_ac2a')
         following_num = num[2].text
+        sleep(random.uniform(0, 2))
         driver.close()
         driver.switch_to.window(driver.window_handles[0])
         sleep(1)
         people_list.append((following_id, following_num))
+        sleep(num_random())
     return tuple(set(tuple(people_list)))
 
 def following_list_2(level1, driver, url):
     people_list = ()
     for i in level1:
         following_id, following_num = i
-        try:
-            driver.get(f'{url}{following_id}/following/')
-            sleep(4)
-            div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
-            people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
-            print("1"*50)
-            temp = following_list_1(people, driver)
-            print("2"*50)
-            people += temp
-        except:
-            print("3"*50)
-            if len(driver.window_handles) > 1:
-                driver.switch_to.window(driver.window_handles[1])
-                driver.close()
-                driver.switch_to.window(driver.window_handles[0])
-            pass
+        driver.get(f'{url}{following_id}/following/')
+        WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')))
+        div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
+        WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
+        people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
+        temp = following_list_1(people, driver)
+        people_list += temp
+        if len(driver.window_handles) > 1:
+            driver.switch_to.window(driver.window_handles[1])
+            driver.close()
+            driver.switch_to.window(driver.window_handles[0])
         sleep(num_random())
     return tuple(set(people_list))
 
@@ -83,11 +85,12 @@ def following_list_3(level2, driver, url):
         following_id, following_num = i
         try:
             driver.get(f'{url}{following_id}/following/')
-            sleep(4)
+            WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')))
+            # sleep(4)
             div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
             people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
             temp = following_list_1(people, driver)
-            people += temp
+            people_list += temp
         except:
             if len(driver.window_handles) > 1:
                 driver.switch_to.window(driver.window_handles[1])
@@ -102,6 +105,7 @@ def step1(level0, driver, save_name):
     try:
         save(level1, save_name)
     except:
+        print("오류 바알새앵3")
         cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료\n")
         cmd_box.see(tkinter.END)
         driver.close()    
@@ -113,8 +117,9 @@ def step2(level0, driver, save_name, url):
     level1 = following_list_1(level0, driver)
     level2 = following_list_2(level1, driver, url)
     try:
-        save(level1+level2, save_name)
+        save(tuple(set(level1+level2)), save_name)
     except:
+        print("오류 바알새앵4")
         cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료\n")
         cmd_box.see(tkinter.END)
         driver.close()
@@ -127,7 +132,7 @@ def step3(level0, driver, save_name, url):
     level2 = following_list_2(level1, driver, url)
     level3 = following_list_3(level2, driver, url)
     try:
-        save(level1+level2+level3, save_name)
+        save(tuple(set(level1+level2+level3)), save_name)
     except:
         cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료\n")
         cmd_box.see(tkinter.END)
@@ -163,39 +168,49 @@ def start():
 
     url = 'https://www.instagram.com/'
 
-    Id = input_ID.get("1.0", "end")
+    Id = input_ID.get("1.0", "end").strip(" ").strip("\n")
+    Pw = input_PW.get().strip(" ").strip("\n")
+    search_id = input_search_ID.get("1.0", "end").strip(" ").strip("\n")
+    save_name = input_save_file.get("1.0", "end").strip("\n")
+    radio = num_var.get()
+    
     if len(Id) == 0:
         cmd_box.insert(tkinter.INSERT,"아이디를 입력해주세요\n")
         cmd_box.see(tkinter.END)
         return
-    Pw = input_PW.get()
-    if len(Pw) == 0:
+    elif len(Pw) == 0:
         cmd_box.insert(tkinter.INSERT,"패스워드를 입력해주세요\n")
         cmd_box.see(tkinter.END)
         return
-    search_id = input_search_ID.get("1.0", "end")
-    if len(Id) == 0:
+    elif len(search_id) == 0:
         cmd_box.insert(tkinter.INSERT,"검색할 인스타 아이디를 입력해주세요\n")
         cmd_box.see(tkinter.END)
         return
-    save_name = input_save_file.get("1.0", "end").strip("\n")
-    if len(save_name) == 0:
+    elif len(save_name) == 0:
         cmd_box.insert(tkinter.INSERT,"저장할 파일 이름을 입력해주세요\n")
         cmd_box.see(tkinter.END)
         return
+    elif radio != 1 and radio != 2 and radio != 3:
+        cmd_box.insert(tkinter.INSERT,"단계를 선택해주세요\n")
+        cmd_box.see(tkinter.END)
+        return
+    
     driver = webdriver.Chrome(driver_path)
     driver.get(url)
-    sleep(2)
-
+    WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '//*[@id="loginForm"]/div/div[1]/div/label/input')))
     driver.find_element(By.XPATH, '//*[@id="loginForm"]/div/div[1]/div/label/input').send_keys(Id)
+    sleep(num_random())
+    WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '//*[@id="loginForm"]/div/div[2]/div/label/input')))
     driver.find_element(By.XPATH, '//*[@id="loginForm"]/div/div[2]/div/label/input').send_keys(Pw)
+    sleep(num_random())
     driver.find_element(By.XPATH, '//*[@id="loginForm"]/div/div[3]').click()
-    sleep(4)
+    sleep(num_random())
 
     while True:
         if driver.current_url != 'https://www.instagram.com/accounts/login/':
             cmd_box.insert(tkinter.INSERT,"로그인 성공\n")
             cmd_box.see(tkinter.END)
+            sleep(2)
             break
         else:
             cmd_box.insert(tkinter.INSERT,"아이디와 패스워드를 다시 입력해주세요\n")
@@ -205,7 +220,7 @@ def start():
             driver.close()
 
     driver.get(f'{url}{search_id}/following/')
-    sleep(4)
+    WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')))
     div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
     level0 = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
 
@@ -215,10 +230,6 @@ def start():
         step2(level0, driver, save_name, url)
     elif num_var.get() == 3:
         step3(level0, driver, save_name, url)
-    else:
-        cmd_box.insert(tkinter.INSERT,"단계를 선택해주세요\n")
-        cmd_box.see(tkinter.END)
-        return
 
 def threading_start():
     start_t = threading.Thread(target=start)
@@ -286,11 +297,9 @@ num_var = tkinter.IntVar()
 num1_button = tkinter.Radiobutton(frame1_2, text="1단계", variable=num_var, value=1) # 1단계 체크 박스
 num1_button.grid(row=0, column=0, padx=0, pady=2)
 
-num2_var = tkinter.IntVar()
 num2_button = tkinter.Radiobutton(frame1_2, text="2단계", variable=num_var, value=2) # 2단계 체크 박스
 num2_button.grid(row=1, column=0, padx=0, pady=2)
 
-num3_var = tkinter.IntVar()
 num3_button = tkinter.Radiobutton(frame1_2, text="3단계", variable=num_var, value=3) # 3단계 체크 박스
 num3_button.grid(row=2, column=0, padx=0, pady=2)
 
