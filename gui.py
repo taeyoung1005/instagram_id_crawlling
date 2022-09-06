@@ -92,7 +92,7 @@ def following_list_3(level2, driver, url):
         sleep(num_random())
     return tuple(set(people_list))
 
-def step1(level0, driver, save_name, url):
+def step1(level0, driver, save_name):
     level1 = following_list_1(level0, driver)
     try:
         save(level1, save_name)
@@ -136,7 +136,7 @@ def start():
     cmd_box.see(tkinter.END)
     global driver
     chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
-    driver_path = f'./{chrome_ver}/chromedriver.exe'
+    driver_path = f'./{chrome_ver}/chromedriver.exe' 
     if os.path.exists(driver_path) != True:
         cmd_box.insert(tkinter.INSERT,"크롬버전에 맞는 크롬드라이버 설치중...\n")
         cmd_box.see(tkinter.END)
@@ -152,7 +152,7 @@ def start():
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('window-size=1920x1080')
     chrome_options.add_argument('disable-gpu')
-    chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36")
+    chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36")
     chrome_options.add_argument('lang=ko_KR')
     chrome_options.add_experimental_option("excludeSwitches",["enable-logging"])
 
@@ -208,9 +208,9 @@ def start():
     if num_var.get() == 1:
         step1(level0, driver, save_name)
     elif num_var.get() == 2:
-        step2(level0, driver, save_name)
+        step2(level0, driver, save_name, url)
     elif num_var.get() == 3:
-        step3(level0, driver, save_name)
+        step3(level0, driver, save_name, url)
     else:
         cmd_box.insert(tkinter.INSERT,"단계를 선택해주세요\n")
         cmd_box.see(tkinter.END)
