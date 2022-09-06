@@ -63,8 +63,12 @@ def following_list_2(level1, driver, url):
             sleep(4)
             div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
             people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
-            people_list += following_list_1(people)
+            print("1"*50)
+            temp = following_list_1(people, driver)
+            print("2"*50)
+            people += temp
         except:
+            print("3"*50)
             if len(driver.window_handles) > 1:
                 driver.switch_to.window(driver.window_handles[1])
                 driver.close()
@@ -82,7 +86,8 @@ def following_list_3(level2, driver, url):
             sleep(4)
             div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
             people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
-            people_list += following_list_1(people)
+            temp = following_list_1(people, driver)
+            people += temp
         except:
             if len(driver.window_handles) > 1:
                 driver.switch_to.window(driver.window_handles[1])
@@ -105,7 +110,7 @@ def step1(level0, driver, save_name):
     driver.close()
 
 def step2(level0, driver, save_name, url):
-    level1 = following_list_1(level0, driver, url)
+    level1 = following_list_1(level0, driver)
     level2 = following_list_2(level1, driver, url)
     try:
         save(level1+level2, save_name)
@@ -118,7 +123,7 @@ def step2(level0, driver, save_name, url):
     driver.close()
 
 def step3(level0, driver, save_name, url):
-    level1 = following_list_1(level0, driver, url)
+    level1 = following_list_1(level0, driver)
     level2 = following_list_2(level1, driver, url)
     level3 = following_list_3(level2, driver, url)
     try:
@@ -204,7 +209,6 @@ def start():
     div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
     level0 = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
 
-    
     if num_var.get() == 1:
         step1(level0, driver, save_name)
     elif num_var.get() == 2:
