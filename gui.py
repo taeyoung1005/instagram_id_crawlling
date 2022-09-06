@@ -59,6 +59,7 @@ def following_list_1(level0, driver):
         sleep(1)
         people_list.append((following_id, following_num))
         sleep(num_random())
+    print(tuple(set(tuple(people_list))))
     return tuple(set(tuple(people_list)))
 
 def following_list_2(level1, driver, url):
@@ -68,8 +69,13 @@ def following_list_2(level1, driver, url):
         driver.get(f'{url}{following_id}/following/')
         WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')))
         div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
-        WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
+        sleep(2)
+        # WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
         people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
+        if len(people) == 0:
+            cmd_box.insert(tkinter.INSERT,f"{following_id} 비공개 계정\n")
+            cmd_box.see(tkinter.END)
+            continue
         temp = following_list_1(people, driver)
         people_list += temp
         if len(driver.window_handles) > 1:
@@ -83,20 +89,24 @@ def following_list_3(level2, driver, url):
     people_list = ()
     for i in level2:
         following_id, following_num = i
-        try:
-            driver.get(f'{url}{following_id}/following/')
-            WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')))
-            # sleep(4)
-            div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
-            people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
-            temp = following_list_1(people, driver)
-            people_list += temp
-        except:
-            if len(driver.window_handles) > 1:
-                driver.switch_to.window(driver.window_handles[1])
-                driver.close()
-                driver.switch_to.window(driver.window_handles[0])
-            pass 
+        driver.get(f'{url}{following_id}/following/')
+        WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')))
+        div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
+        sleep(2)
+        # WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
+        people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
+
+        if len(people) == 0:
+            cmd_box.insert(tkinter.INSERT,f"{following_id} 비공개 계정\n")
+            cmd_box.see(tkinter.END)
+            continue
+        temp = following_list_1(people, driver)
+        people_list += temp
+
+        if len(driver.window_handles) > 1:
+            driver.switch_to.window(driver.window_handles[1])
+            driver.close()
+            driver.switch_to.window(driver.window_handles[0])
         sleep(num_random())
     return tuple(set(people_list))
 
@@ -222,7 +232,17 @@ def start():
     driver.get(f'{url}{search_id}/following/')
     WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')))
     div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
+    sleep(2)
+    # WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
     level0 = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
+
+    if len(level0) == 0:
+        cmd_box.insert(tkinter.INSERT,f"{search_id} 비공개 계정입니다\n")
+        cmd_box.see(tkinter.END)
+        cmd_box.insert(tkinter.INSERT,"크롬 드라이버 종료\n")
+        cmd_box.see(tkinter.END)
+        driver.close()
+        return
 
     if num_var.get() == 1:
         step1(level0, driver, save_name)
