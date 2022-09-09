@@ -163,15 +163,16 @@ def following_list_3(level2, driver, url):
     return tuple(set(people_list))
 
 def step1(level0, driver, save_name):
-    level1 = following_list_1(level0, driver)
     try:
-        save(level1, save_name)
+        level1 = following_list_1(level0, driver)
     except:
         print("오류 발생1")
         cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료1\n")
         cmd_box.see(tkinter.END)
         driver.close()
         return
+    finally:
+        save(level1, save_name)
     cmd_box.insert(tkinter.INSERT,"크롤링 완료\n")
     cmd_box.see(tkinter.END)
     cmd_box.insert(tkinter.INSERT,"크롬 드라이버 종료\n")
@@ -180,16 +181,17 @@ def step1(level0, driver, save_name):
     return
 
 def step2(level0, driver, save_name, url):
-    level1 = following_list_1(level0, driver)
-    level2 = following_list_2(level1, driver, url)
     try:
-        save(tuple(set(level1+level2)), save_name)
+        level1 = following_list_1(level0, driver)
+        level2 = following_list_2(level1, driver, url)
     except:
         print("오류 발생2")
         cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료2\n")
         cmd_box.see(tkinter.END)
         driver.close()
         return
+    finally:
+        save(tuple(set(level1+level2)), save_name)
     cmd_box.insert(tkinter.INSERT,"크롤링 완료\n")
     cmd_box.see(tkinter.END)
     cmd_box.insert(tkinter.INSERT,"크롬 드라이버 종료\n")
@@ -198,17 +200,18 @@ def step2(level0, driver, save_name, url):
     return
 
 def step3(level0, driver, save_name, url):
-    level1 = following_list_1(level0, driver)
-    level2 = following_list_2(level1, driver, url)
-    level3 = following_list_3(level2, driver, url)
     try:
-        save(tuple(set(level1+level2+level3)), save_name)
+        level1 = following_list_1(level0, driver)
+        level2 = following_list_2(level1, driver, url)
+        level3 = following_list_3(level2, driver, url)
     except:
         print("오류 발생3")
         cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료3\n")
         cmd_box.see(tkinter.END)
         driver.close()
-        return
+        return        
+    finally:
+        save(tuple(set(level1+level2+level3)), save_name)
     cmd_box.insert(tkinter.INSERT,"크롤링 완료\n")
     cmd_box.see(tkinter.END)
     cmd_box.insert(tkinter.INSERT,"크롬 드라이버 종료\n")
