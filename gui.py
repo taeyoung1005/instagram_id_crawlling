@@ -27,7 +27,8 @@ def save(level, save_name):
     file.close()
 
 def following_list_1(level0, driver):
-    print("1단계")
+    cmd_box.insert(tkinter.INSERT,"1단계\n")
+    cmd_box.see(tkinter.END)
     people_list = []
     for i in level0:
         try:
@@ -87,7 +88,8 @@ def following_list_1(level0, driver):
     return tuple(set(tuple(people_list)))
 
 def following_list_2(level1, driver, url):
-    print("2단계")
+    cmd_box.insert(tkinter.INSERT,"2단계\n")
+    cmd_box.see(tkinter.END)
     people_list = ()
     for i in level1:
         following_id, following_num = i
@@ -106,17 +108,27 @@ def following_list_2(level1, driver, url):
             cmd_box.insert(tkinter.INSERT,f"{following_id} 비공개 계정\n")
             cmd_box.see(tkinter.END)
             continue
-        temp = following_list_1(people, driver)
+        try:
+            temp = following_list_1(people, driver)
+        except:
+            break
         people_list += temp
-        if len(driver.window_handles) > 1:
-            driver.switch_to.window(driver.window_handles[1])
-            driver.close()
-            driver.switch_to.window(driver.window_handles[0])
+        try:
+            while True:
+                if len(driver.window_handles) > 1:
+                    driver.switch_to.window(driver.window_handles[-1])
+                    driver.close()
+                else:
+                    driver.switch_to.window(driver.window_handles[0])
+                    break
+        except:
+            pass
         sleep(num_random())
     return tuple(set(people_list))
 
 def following_list_3(level2, driver, url):
-    print("3단계")
+    cmd_box.insert(tkinter.INSERT,"3단계\n")
+    cmd_box.see(tkinter.END)
     people_list = ()
     for i in level2:
         following_id, following_num = i
@@ -135,12 +147,18 @@ def following_list_3(level2, driver, url):
             cmd_box.insert(tkinter.INSERT,f"{following_id} 비공개 계정\n")
             cmd_box.see(tkinter.END)
             continue
-        temp = following_list_1(people, driver)
+        try:
+            temp = following_list_1(people, driver)
+        except:
+            break
         people_list += temp
-        if len(driver.window_handles) > 1:
-            driver.switch_to.window(driver.window_handles[1])
-            driver.close()
-            driver.switch_to.window(driver.window_handles[0])
+        try:
+            if len(driver.window_handles) > 1:
+                driver.switch_to.window(driver.window_handles[1])
+                driver.close()
+                driver.switch_to.window(driver.window_handles[0])
+        except:
+            pass
         sleep(num_random())
     return tuple(set(people_list))
 
@@ -150,7 +168,7 @@ def step1(level0, driver, save_name):
         save(level1, save_name)
     except:
         print("오류 발생1")
-        cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료\n")
+        cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료1\n")
         cmd_box.see(tkinter.END)
         driver.close()
         return
@@ -168,7 +186,7 @@ def step2(level0, driver, save_name, url):
         save(tuple(set(level1+level2)), save_name)
     except:
         print("오류 발생2")
-        cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료\n")
+        cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료2\n")
         cmd_box.see(tkinter.END)
         driver.close()
         return
@@ -187,7 +205,7 @@ def step3(level0, driver, save_name, url):
         save(tuple(set(level1+level2+level3)), save_name)
     except:
         print("오류 발생3")
-        cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료\n")
+        cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료3\n")
         cmd_box.see(tkinter.END)
         driver.close()
         return
@@ -290,7 +308,7 @@ def start():
     try:
         WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9h._ab9m._ab9p._aba4._abag._abcm')))
         if driver.find_element(By.CLASS_NAME, '_ab8w._ab94._ab99._ab9h._ab9m._ab9p._aba4._abag._abcm').is_displayed() == True:
-            cmd_box.insert(tkinter.INSERT,f"페이지를 사용할 수 없습니다.\n")
+            cmd_box.insert(tkinter.INSERT,f"페이지를 사용할 수 없습니다.0-1\n")
             cmd_box.see(tkinter.END)
             driver.close()
             return
@@ -302,7 +320,7 @@ def start():
         WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
         level0 = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
     except:
-        cmd_box.insert(tkinter.INSERT,f"페이지를 사용할 수 없습니다.\n")
+        cmd_box.insert(tkinter.INSERT,f"페이지를 사용할 수 없습니다.0-2\n")
         cmd_box.see(tkinter.END)
         return
     
