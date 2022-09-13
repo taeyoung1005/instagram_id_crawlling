@@ -13,8 +13,19 @@ import random
 import os
 import sys
 import threading
+from datetime import datetime
 
 driver = None
+
+def git_upload():
+    dateformat = "%Y-%m-%d %H:%M:%S"
+    git_add = "git add ."
+    time_now = datetime.now().strftime(dateformat)
+    git_commit = f"git commit -m '{time_now}'"
+    git_push = "git push"
+    os.system(git_add)
+    os.system(git_commit)
+    os.system(git_push)
 
 def num_random():
     random_num = random.uniform(2, 5)
@@ -346,6 +357,7 @@ def exit():
     except:
         cmd_box.insert(tkinter.INSERT,"프로그램이 종료됩니다.\n")
         cmd_box.see(tkinter.END)
+        git_upload()
         sys.exit()
     sys.exit()
 
