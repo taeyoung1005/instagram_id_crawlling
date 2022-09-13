@@ -32,46 +32,42 @@ def following_list_1(level0, driver):
     people_list = []
     for i in level0:
         try:
-            if driver.find_element(By.CLASS_NAME, '_ab8w._ab94._ab99._ab9h._ab9m._ab9p._aba4._abag._abcm').is_displayed() == True:
+            if driver.find_element(By.CLASS_NAME, 'jarlqp65').is_displayed() == True:
                 cmd_box.insert(tkinter.INSERT,f"페이지를 사용할 수 없습니다.\n")
                 cmd_box.see(tkinter.END)
                 driver.close()
                 break
         except:
             pass
+
         try:
             driver.execute_script("arguments[0].scrollIntoView();", i)
-        except:
-            cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료\n")
-            cmd_box.see(tkinter.END)
-            driver.close()
-            break
-        try:
             if driver.find_element(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9m._ab9p._abc0._abcm').is_displayed() == True:
                 cmd_box.insert(tkinter.INSERT,"팔로잉 로딩중\n")
                 cmd_box.see(tkinter.END)
                 sleep(3)
         except:
             pass
-        following_id = i.find_element(By.CLASS_NAME, '_aacl._aaco._aacw._adda._aacx._aad7._aade').text.strip("인증됨\n")
+
         try:
-            WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9f._ab9m._ab9o._abcm')))
+            following_id = i.find_element(By.CLASS_NAME, '_aacl._aaco._aacw._adda._aacx._aad7._aade').text.strip("인증됨\n")
+            WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9f._ab9m._ab9o._abcm')))
             div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
-            WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
+            WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
             people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
+
+            for j in people:
+                if j not in level0:
+                    level0.append(j)
         except:
             continue
-
-        for j in people:
-            if j not in level0:
-                level0.append(j)
             
         i_href = i.find_element(By.TAG_NAME, 'a').get_attribute('href')
         driver.execute_script(f'window.open("{i_href}");')
         driver.switch_to.window(driver.window_handles[1])
 
         try:
-            WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ac2a')))
+            WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ac2a')))
             num = driver.find_elements(By.CLASS_NAME, '_ac2a')
             following_num = num[2].text
         except:
@@ -97,9 +93,9 @@ def following_list_2(level1, driver, url):
         sleep(2)
 
         try:
-            WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9f._ab9m._ab9o._abcm')))
+            WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9f._ab9m._ab9o._abcm')))
             div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
-            WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
+            WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
             people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
         except:
             continue
@@ -108,11 +104,12 @@ def following_list_2(level1, driver, url):
             cmd_box.insert(tkinter.INSERT,f"{following_id} 비공개 계정\n")
             cmd_box.see(tkinter.END)
             continue
-        try:
-            temp = following_list_1(people, driver)
-        except:
+
+        temp = following_list_1(people, driver)
+        if len(temp) != 0:
+            people_list += temp
             break
-        people_list += temp
+
         try:
             while True:
                 if len(driver.window_handles) > 1:
@@ -136,9 +133,9 @@ def following_list_3(level2, driver, url):
         sleep(2)
 
         try:
-            WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9f._ab9m._ab9o._abcm')))
+            WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9f._ab9m._ab9o._abcm')))
             div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
-            WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
+            WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
             people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
         except:
             continue
@@ -147,11 +144,12 @@ def following_list_3(level2, driver, url):
             cmd_box.insert(tkinter.INSERT,f"{following_id} 비공개 계정\n")
             cmd_box.see(tkinter.END)
             continue
-        try:
-            temp = following_list_1(people, driver)
-        except:
+
+        temp = following_list_1(people, driver)
+        if len(temp) != 0:
+            people_list += temp
             break
-        people_list += temp
+
         try:
             if len(driver.window_handles) > 1:
                 driver.switch_to.window(driver.window_handles[1])
@@ -163,16 +161,8 @@ def following_list_3(level2, driver, url):
     return tuple(set(people_list))
 
 def step1(level0, driver, save_name):
-    try:
-        level1 = following_list_1(level0, driver)
-    except:
-        print("오류 발생1")
-        cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료1\n")
-        cmd_box.see(tkinter.END)
-        driver.close()
-        return
-    finally:
-        save(level1, save_name)
+    level1 = following_list_1(level0, driver)
+    save(level1, save_name)
     cmd_box.insert(tkinter.INSERT,"크롤링 완료\n")
     cmd_box.see(tkinter.END)
     cmd_box.insert(tkinter.INSERT,"크롬 드라이버 종료\n")
@@ -181,17 +171,9 @@ def step1(level0, driver, save_name):
     return
 
 def step2(level0, driver, save_name, url):
-    try:
-        level1 = following_list_1(level0, driver)
-        level2 = following_list_2(level1, driver, url)
-    except:
-        print("오류 발생2")
-        cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료2\n")
-        cmd_box.see(tkinter.END)
-        driver.close()
-        return
-    finally:
-        save(tuple(set(level1+level2)), save_name)
+    level1 = following_list_1(level0, driver)
+    level2 = following_list_2(level1, driver, url)
+    save(tuple(set(level1+level2)), save_name)
     cmd_box.insert(tkinter.INSERT,"크롤링 완료\n")
     cmd_box.see(tkinter.END)
     cmd_box.insert(tkinter.INSERT,"크롬 드라이버 종료\n")
@@ -200,18 +182,10 @@ def step2(level0, driver, save_name, url):
     return
 
 def step3(level0, driver, save_name, url):
-    try:
-        level1 = following_list_1(level0, driver)
-        level2 = following_list_2(level1, driver, url)
-        level3 = following_list_3(level2, driver, url)
-    except:
-        print("오류 발생3")
-        cmd_box.insert(tkinter.INSERT,"알수없는 이유로 종료3\n")
-        cmd_box.see(tkinter.END)
-        driver.close()
-        return        
-    finally:
-        save(tuple(set(level1+level2+level3)), save_name)
+    level1 = following_list_1(level0, driver)
+    level2 = following_list_2(level1, driver, url)
+    level3 = following_list_3(level2, driver, url)      
+    save(tuple(set(level1+level2+level3)), save_name)
     cmd_box.insert(tkinter.INSERT,"크롤링 완료\n")
     cmd_box.see(tkinter.END)
     cmd_box.insert(tkinter.INSERT,"크롬 드라이버 종료\n")
@@ -275,10 +249,10 @@ def start():
     
     driver = webdriver.Chrome(driver_path)
     driver.get(url)
-    WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '//*[@id="loginForm"]/div/div[1]/div/label/input')))
+    WD(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="loginForm"]/div/div[1]/div/label/input')))
     driver.find_element(By.XPATH, '//*[@id="loginForm"]/div/div[1]/div/label/input').send_keys(Id)
     sleep(num_random())
-    WD(driver, 8).until(EC.presence_of_element_located((By.XPATH, '//*[@id="loginForm"]/div/div[2]/div/label/input')))
+    WD(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="loginForm"]/div/div[2]/div/label/input')))
     driver.find_element(By.XPATH, '//*[@id="loginForm"]/div/div[2]/div/label/input').send_keys(Pw)
     sleep(num_random())
     driver.find_element(By.XPATH, '//*[@id="loginForm"]/div/div[3]').click()
@@ -309,18 +283,20 @@ def start():
     driver.get(f'{url}{search_id}/following/')
     sleep(2)
     try:
-        WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9h._ab9m._ab9p._aba4._abag._abcm')))
+        WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9h._ab9m._ab9p._aba4._abag._abcm')))
         if driver.find_element(By.CLASS_NAME, '_ab8w._ab94._ab99._ab9h._ab9m._ab9p._aba4._abag._abcm').is_displayed() == True:
-            cmd_box.insert(tkinter.INSERT,f"페이지를 사용할 수 없습니다.0-1\n")
+            cmd_box.insert(tkinter.INSERT,"페이지를 사용할 수 없습니다.0-1\n")
+            cmd_box.see(tkinter.END)
+            cmd_box.insert(tkinter.INSERT,"크롬 드라이버 종료\n")
             cmd_box.see(tkinter.END)
             driver.close()
             return
     except:
         pass
     try:
-        WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9f._ab9m._ab9o._abcm')))
+        WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9f._ab9m._ab9o._abcm')))
         div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
-        WD(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
+        WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
         level0 = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
     except:
         cmd_box.insert(tkinter.INSERT,f"페이지를 사용할 수 없습니다.0-2\n")
