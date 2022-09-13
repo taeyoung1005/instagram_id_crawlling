@@ -18,10 +18,10 @@ from datetime import datetime
 driver = None
 
 def git_upload():
-    dateformat = "%Y-%m-%d %H:%M:%S"
+    dateformat = "%Y/%m/%d-%H:%M"
     git_add = "git add ."
     time_now = datetime.now().strftime(dateformat)
-    git_commit = f"git commit -m '{time_now}'"
+    git_commit = f"git commit -m {time_now}"
     git_push = "git push"
     os.system(git_add)
     os.system(git_commit)
