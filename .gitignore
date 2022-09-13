@@ -1,5 +1,5 @@
-.txt
+*.txt
 .ipynb_checkpoints/
 105/
-.jpynb
+*.jpynb
 venv/
