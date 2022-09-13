@@ -33,8 +33,9 @@ def following_list_1(level0, driver):
     for i in level0:
         try:
             if driver.find_element(By.CLASS_NAME, '_aacl._aacr._aacw._adda._aacx._aad6._aadb').text == "죄송합니다. 페이지를 사용할 수 없습니다.":
-                cmd_box.insert(tkinter.INSERT,f"페이지를 사용할 수 없습니다.\n")
+                cmd_box.insert(tkinter.INSERT,"페이지를 사용할 수 없습니다.\n")
                 cmd_box.see(tkinter.END)
+                driver.close()
                 driver.close()
                 break
         except:
@@ -313,7 +314,7 @@ def start():
         sleep(2)
         level0 = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
     except:
-        cmd_box.insert(tkinter.INSERT,f"페이지를 사용할 수 없습니다.0-2\n")
+        cmd_box.insert(tkinter.INSERT,"페이지를 사용할 수 없습니다.0-2\n")
         cmd_box.see(tkinter.END)
         return
     
