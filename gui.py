@@ -22,7 +22,7 @@ def git_upload():
     git_add = "git add ."
     time_now = datetime.now().strftime(dateformat)
     git_commit = f"git commit -m {time_now}_최신화"
-    git_push = "git push"
+    git_push = "git push origin main"
     os.system(git_add)
     os.system(git_commit)
     os.system(git_push)
@@ -86,8 +86,16 @@ def following_list_1(level0, driver):
             continue
 
         sleep(random.uniform(0, 2))
-        driver.close()
-        driver.switch_to.window(driver.window_handles[0])
+        try:
+            while True:
+                if len(driver.window_handles) > 1:
+                    driver.switch_to.window(driver.window_handles[-1])
+                    driver.close()
+                    driver.switch_to.window(driver.window_handles[0])
+                else:
+                    break
+        except:
+            pass
         sleep(1)
         people_list.append((following_id, following_num))
         cmd_box.insert(tkinter.INSERT,f"{following_id}       {following_num}명\n")
@@ -128,8 +136,8 @@ def following_list_2(level1, driver, url):
                 if len(driver.window_handles) > 1:
                     driver.switch_to.window(driver.window_handles[-1])
                     driver.close()
-                else:
                     driver.switch_to.window(driver.window_handles[0])
+                else:
                     break
         except:
             pass
@@ -166,10 +174,13 @@ def following_list_3(level2, driver, url):
             break
 
         try:
-            if len(driver.window_handles) > 1:
-                driver.switch_to.window(driver.window_handles[1])
-                driver.close()
-                driver.switch_to.window(driver.window_handles[0])
+            while True:
+                if len(driver.window_handles) > 1:
+                    driver.switch_to.window(driver.window_handles[-1])
+                    driver.close()
+                    driver.switch_to.window(driver.window_handles[0])
+                else:
+                    break
         except:
             pass
         sleep(num_random())
