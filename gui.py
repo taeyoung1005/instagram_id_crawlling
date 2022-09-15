@@ -13,33 +13,23 @@ import random
 import os
 import sys
 import threading
-from datetime import datetime
+
+from selenium.webdriver.chrome.service import Service
+from subprocess import CREATE_NO_WINDOW
 
 driver = None
-
-def git_upload():
-    dateformat = "%Y/%m/%d-%H:%M"
-    git_add = "git add ."
-    time_now = datetime.now().strftime(dateformat)
-    git_commit = f"git commit -m {time_now}_최신화"
-    git_push = "git push origin main"
-    os.system(git_add)
-    os.system(git_commit)
-    os.system(git_push)
 
 def num_random():
     random_num = random.uniform(2, 5)
     return random_num
 
 def save(level, save_name):
-    file = open(f'./{save_name}.txt', 'a', encoding='utf-8')
+    file = open(f'./data/{save_name}.txt', 'a', encoding='utf-8')
     for following_id, following_num in level:
         file.write(f"{following_id}       {following_num}명\n")
     file.close()
 
 def following_list_1(level0, driver):
-    cmd_box.insert(tkinter.INSERT,"1단계\n")
-    cmd_box.see(tkinter.END)
     people_list = []
     for i in level0:
         try:
@@ -106,8 +96,6 @@ def following_list_1(level0, driver):
     return tuple(set(tuple(people_list)))
 
 def following_list_2(level1, driver, url):
-    cmd_box.insert(tkinter.INSERT,"2단계\n")
-    cmd_box.see(tkinter.END)
     people_list = ()
     for i in level1:
         following_id, following_num = i
@@ -144,8 +132,6 @@ def following_list_2(level1, driver, url):
     return tuple(set(people_list))
 
 def following_list_3(level2, driver, url):
-    cmd_box.insert(tkinter.INSERT,"3단계\n")
-    cmd_box.see(tkinter.END)
     people_list = ()
     for i in level2:
         following_id, following_num = i
@@ -183,6 +169,8 @@ def following_list_3(level2, driver, url):
     return tuple(set(people_list))
 
 def step1(level0, driver, save_name):
+    cmd_box.insert(tkinter.INSERT,"1단계\n")
+    cmd_box.see(tkinter.END)
     level1 = following_list_1(level0, driver)
     if len(level1) == 0:
         level1 = ()
@@ -195,6 +183,8 @@ def step1(level0, driver, save_name):
     return
 
 def step2(level0, driver, save_name, url):
+    cmd_box.insert(tkinter.INSERT,"2단계\n")
+    cmd_box.see(tkinter.END)
     level1 = following_list_1(level0, driver)
     level2 = following_list_2(level1, driver, url)
     if len(level1) == 0:
@@ -210,6 +200,8 @@ def step2(level0, driver, save_name, url):
     return
 
 def step3(level0, driver, save_name, url):
+    cmd_box.insert(tkinter.INSERT,"1단계\n")
+    cmd_box.see(tkinter.END)
     level1 = following_list_1(level0, driver)
     level2 = following_list_2(level1, driver, url)
     level3 = following_list_3(level2, driver, url)
@@ -228,11 +220,17 @@ def step3(level0, driver, save_name, url):
     return
 
 def start():
+    if not os.path.isdir('./data'):
+        os.mkdir('./data')
+
     cmd_box.insert(tkinter.INSERT,"프로그램이 시작됩니다.\n")
     cmd_box.see(tkinter.END)
     global driver
     chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
-    driver_path = f'./{chrome_ver}/chromedriver.exe' 
+    driver_path = f'./{chrome_ver}/chromedriver.exe'
+    service = Service(driver_path)
+    service.creationflags = CREATE_NO_WINDOW
+
     if os.path.exists(driver_path) != True:
         cmd_box.insert(tkinter.INSERT,"크롬버전에 맞는 크롬드라이버 설치중...\n")
         cmd_box.see(tkinter.END)
@@ -241,7 +239,7 @@ def start():
         cmd_box.see(tkinter.END)
 
     chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('--headless')
+    # chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--privileged')
     chrome_options.add_argument('--incognito')
@@ -281,7 +279,7 @@ def start():
         cmd_box.see(tkinter.END)
         return
     
-    driver = webdriver.Chrome(driver_path)
+    driver = webdriver.Chrome(driver_path, options=chrome_options, service=service)
     driver.get(url)
     WD(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="loginForm"]/div/div[1]/div/label/input')))
     driver.find_element(By.XPATH, '//*[@id="loginForm"]/div/div[1]/div/label/input').send_keys(Id)
@@ -364,14 +362,13 @@ def exit():
     except:
         cmd_box.insert(tkinter.INSERT,"프로그램이 종료됩니다.\n")
         cmd_box.see(tkinter.END)
-        git_upload()
         sys.exit()
 
 # TTK 초기 설정
 window=tkinter.Tk()
-window.title("인스타그램 매크로")
+window.title("인스타그램 팔로잉 크롤러")
 window.geometry("570x350")
-#window.iconbitmap('icon.ico')
+window.iconbitmap('./icon.ico')
 window.resizable(False, False)
 
 # [ 아이디, 비밀번호, 검색 아이디, 저장 파일 이름, 단계 ]
