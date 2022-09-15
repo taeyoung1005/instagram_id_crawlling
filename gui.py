@@ -46,8 +46,13 @@ def following_list_1(level0, driver):
             if driver.find_element(By.CLASS_NAME, '_aacl._aacr._aacw._adda._aacx._aad6._aadb').text == "죄송합니다. 페이지를 사용할 수 없습니다.":
                 cmd_box.insert(tkinter.INSERT,"페이지를 사용할 수 없습니다.\n")
                 cmd_box.see(tkinter.END)
-                driver.close()
-                driver.close()
+                while True:
+                    if len(driver.window_handles) > 1:
+                        driver.switch_to.window(driver.window_handles[-1])
+                        driver.close()
+                        driver.switch_to.window(driver.window_handles[0])
+                    else:
+                        break
                 break
         except:
             pass
@@ -86,16 +91,13 @@ def following_list_1(level0, driver):
             continue
 
         sleep(random.uniform(0, 2))
-        try:
-            while True:
-                if len(driver.window_handles) > 1:
-                    driver.switch_to.window(driver.window_handles[-1])
-                    driver.close()
-                    driver.switch_to.window(driver.window_handles[0])
-                else:
-                    break
-        except:
-            pass
+        while True:
+            if len(driver.window_handles) > 1:
+                driver.switch_to.window(driver.window_handles[-1])
+                driver.close()
+                driver.switch_to.window(driver.window_handles[0])
+            else:
+                break
         sleep(1)
         people_list.append((following_id, following_num))
         cmd_box.insert(tkinter.INSERT,f"{following_id}       {following_num}명\n")
@@ -131,16 +133,13 @@ def following_list_2(level1, driver, url):
         else:
             break
 
-        try:
-            while True:
-                if len(driver.window_handles) > 1:
-                    driver.switch_to.window(driver.window_handles[-1])
-                    driver.close()
-                    driver.switch_to.window(driver.window_handles[0])
-                else:
-                    break
-        except:
-            pass
+        while True:
+            if len(driver.window_handles) > 1:
+                driver.switch_to.window(driver.window_handles[-1])
+                driver.close()
+                driver.switch_to.window(driver.window_handles[0])
+            else:
+                break
         sleep(num_random())
     return tuple(set(people_list))
 
@@ -173,16 +172,13 @@ def following_list_3(level2, driver, url):
             print("종료")
             break
 
-        try:
-            while True:
-                if len(driver.window_handles) > 1:
-                    driver.switch_to.window(driver.window_handles[-1])
-                    driver.close()
-                    driver.switch_to.window(driver.window_handles[0])
-                else:
-                    break
-        except:
-            pass
+        while True:
+            if len(driver.window_handles) > 1:
+                driver.switch_to.window(driver.window_handles[-1])
+                driver.close()
+                driver.switch_to.window(driver.window_handles[0])
+            else:
+                break
         sleep(num_random())
     return tuple(set(people_list))
 
