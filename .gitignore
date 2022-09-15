@@ -4,3 +4,4 @@
 *.jpynb
 venv/
 dist/
+build/
