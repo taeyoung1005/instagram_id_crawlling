@@ -3,3 +3,4 @@
 105/
 *.jpynb
 venv/
+dist/
