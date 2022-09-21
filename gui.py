@@ -33,21 +33,6 @@ def following_list_1(level0, driver):
     people_list = []
     for i in level0:
         try:
-            if driver.find_element(By.CLASS_NAME, '_aacl._aacr._aacw._adda._aacx._aad6._aadb').text == "죄송합니다. 페이지를 사용할 수 없습니다.":
-                cmd_box.insert(tkinter.INSERT,"페이지를 사용할 수 없습니다.\n")
-                cmd_box.see(tkinter.END)
-                while True:
-                    if len(driver.window_handles) > 1:
-                        driver.switch_to.window(driver.window_handles[-1])
-                        driver.close()
-                        driver.switch_to.window(driver.window_handles[0])
-                    else:   
-                        break
-                break
-        except:
-            pass
-        
-        try:
             driver.execute_script("arguments[0].scrollIntoView();", i)
             print("스크롤")
             if driver.find_element(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9m._ab9p._abc0._abcm').is_displayed() == True:
@@ -78,6 +63,17 @@ def following_list_1(level0, driver):
 
         try:
             WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ac2a')))
+            if driver.find_element(By.CLASS_NAME, '_aacl._aacr._aacw._adda._aacx._aad6._aadb').text == "죄송합니다. 페이지를 사용할 수 없습니다.":
+                cmd_box.insert(tkinter.INSERT,"페이지를 사용할 수 없습니다.\n")
+                cmd_box.see(tkinter.END)
+                while True:
+                    if len(driver.window_handles) > 1:
+                        driver.switch_to.window(driver.window_handles[-1])
+                        driver.close()
+                        driver.switch_to.window(driver.window_handles[0])
+                    else:   
+                        break
+                break
             num = driver.find_elements(By.CLASS_NAME, '_ac2a')
             following_num = num[2].text
             following_id = driver.current_url.split('/')[3]
