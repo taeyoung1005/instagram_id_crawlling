@@ -75,7 +75,7 @@ def following_list_1(level0, driver):
                         break
                 break
             num = driver.find_elements(By.CLASS_NAME, '_ac2a')
-            following_num = num[2].text
+            following_num = num[1].get_attribute('title')
             following_id = driver.current_url.split('/')[3]
             print(following_id)
             print(following_num)
