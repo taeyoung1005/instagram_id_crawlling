@@ -41,14 +41,15 @@ def following_list_1(level0, driver):
                         driver.switch_to.window(driver.window_handles[-1])
                         driver.close()
                         driver.switch_to.window(driver.window_handles[0])
-                    else:
+                    else:   
                         break
                 break
         except:
             pass
-
+        
         try:
             driver.execute_script("arguments[0].scrollIntoView();", i)
+            print("스크롤")
             if driver.find_element(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9m._ab9p._abc0._abcm').is_displayed() == True:
                 cmd_box.insert(tkinter.INSERT,"팔로잉 로딩중\n")
                 cmd_box.see(tkinter.END)
@@ -57,18 +58,20 @@ def following_list_1(level0, driver):
             pass
 
         try:
-            following_id = i.find_element(By.CLASS_NAME, '_aacl._aaco._aacw._adda._aacx._aad7._aade').text.strip("인증됨\n")
+            print("0")
             WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9f._ab9m._ab9o._abcm')))
+            print("1")
             div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
-            sleep(2)
+            print("2")
+            # WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abc')))
+            print("3")
             people = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
-
+            print("4")
             for j in people:
                 if j not in level0:
                     level0.append(j)
         except:
-            continue
-            
+            pass
         i_href = i.find_element(By.TAG_NAME, 'a').get_attribute('href')
         driver.execute_script(f'window.open("{i_href}");')
         driver.switch_to.window(driver.window_handles[1])
@@ -77,6 +80,9 @@ def following_list_1(level0, driver):
             WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ac2a')))
             num = driver.find_elements(By.CLASS_NAME, '_ac2a')
             following_num = num[2].text
+            following_id = driver.current_url.split('/')[3]
+            print(following_id)
+            print(following_num)
         except:
             continue
 
@@ -325,13 +331,18 @@ def start():
     except:
         pass
     try:
-        WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab99._ab9f._ab9m._ab9o._abcm')))
+        sleep(4)
         div = driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div[1]/div')
-        sleep(2)
+        # WD(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')))
         level0 = div.find_elements(By.CLASS_NAME, '_ab8w._ab94._ab97._ab9f._ab9k._ab9p._ab9-._aba8._abcm')
+        print(level0)
+        print(len(level0))
     except:
         cmd_box.insert(tkinter.INSERT,"페이지를 사용할 수 없습니다.0-2\n")
         cmd_box.see(tkinter.END)
+        cmd_box.insert(tkinter.INSERT,"크롬 드라이버 종료\n")
+        cmd_box.see(tkinter.END)
+        driver.close()
         return
     
     if len(level0) == 0:
